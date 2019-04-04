@@ -10,6 +10,7 @@ public class CelebrityManager : MonoBehaviour {
     {
         public string name;
         public string description;
+        public bool included;
         public Sprite thumbnail;
         public List<celebrityOption> variants;
         public Transform prefab;
@@ -21,6 +22,7 @@ public class CelebrityManager : MonoBehaviour {
     public Transform MarkerOffsetObject;
     public Transform spawnpointPrefab;
     public bool dontRefreshWhenTargetIsLost = false;
+    public bool dontDestroyWhenTargetIsLost = false;
     Transform currentCelebrity;
     ScaleKeeper currentCelebrityScaler;
     float scalerSizeFloat = 0;
@@ -80,6 +82,24 @@ public class CelebrityManager : MonoBehaviour {
 
                 currentCelebrityScaler = currentCelebrity.GetComponentInChildren<ScaleKeeper>();
             }
+            else if (dontDestroyWhenTargetIsLost)
+            {
+                if (currentCelebrity)
+                {
+                    Destroy(currentCelebrity.gameObject);
+                }
+
+                if (selectedVariant < 0)
+                    currentCelebrity = Instantiate(celebrityList[selectedCelebrity].prefab, MarkerOffsetObject.position, Quaternion.identity, MarkerOffsetObject);
+                else
+                    currentCelebrity = Instantiate(celebrityList[selectedCelebrity].variants[selectedVariant].prefab, MarkerOffsetObject.position, Quaternion.identity, MarkerOffsetObject);
+
+                currentCelebrityScaler = currentCelebrity.GetComponentInChildren<ScaleKeeper>();
+                SetMovementFloat(scalerPositionFloat);
+                SetSizeFloat(scalerSizeFloat);
+
+                onSpawn.Invoke();
+            }
             else if (!currentCelebrity)
             {
                 if (selectedVariant < 0)
@@ -99,6 +119,14 @@ public class CelebrityManager : MonoBehaviour {
     public void DeleteSelectedCelebrity()
     {
         Destroy(currentCelebrity.gameObject);
+    }
+
+    public void MoveARObjectToRoot()
+    {
+        if (dontDestroyWhenTargetIsLost && currentCelebrity)
+        {
+            currentCelebrity.transform.SetParent(null);
+        }
     }
 
     public void SelectCelebrityAndVariant(string indexSeparatedByUnderscore)

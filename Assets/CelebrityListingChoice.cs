@@ -25,22 +25,28 @@ public class CelebrityListingChoice : MonoBehaviour {
         Transform temp;
         foreach (CelebrityManager.celebrityOption c in celebrityManager.celebrityList)
         {
-            if (c.variants != null && c.variants.Count > 0)
+            if (c.included)
             {
-                for (int i = 0; i < c.variants.Count; i++)
+                if (c.variants != null && c.variants.Count > 0)
+                {
+                    for (int i = 0; i < c.variants.Count; i++)
+                    {
+                        if (c.variants[i].included)
+                        {
+                            temp = Instantiate(prefab, parent);
+                            temp.GetComponentInChildren<ButtonGeneric>().SetButton(new ButtonProperty(this.transform, "SelectCeleb", n.ToString() + "_" + i, c.variants[i].thumbnail));
+                            temp.GetComponentInChildren<Text>().text = "";
+                            spawnedButtons.Add(temp);
+                        }
+                    }
+                }
+                else
                 {
                     temp = Instantiate(prefab, parent);
-                    temp.GetComponentInChildren<ButtonGeneric>().SetButton(new ButtonProperty(this.transform, "SelectCeleb", n.ToString() + "_" + i, c.variants[i].thumbnail));
+                    temp.GetComponentInChildren<ButtonGeneric>().SetButton(new ButtonProperty(this.transform, "SelectCeleb", n.ToString() + "_-1", c.thumbnail));
                     temp.GetComponentInChildren<Text>().text = "";
                     spawnedButtons.Add(temp);
                 }
-            }
-            else
-            {
-                temp = Instantiate(prefab, parent);
-                temp.GetComponentInChildren<ButtonGeneric>().SetButton(new ButtonProperty(this.transform, "SelectCeleb", n.ToString() + "_-1", c.thumbnail));
-                temp.GetComponentInChildren<Text>().text = "";
-                spawnedButtons.Add(temp);
             }
             n++;
         }

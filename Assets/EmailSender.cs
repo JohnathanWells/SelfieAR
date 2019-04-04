@@ -20,6 +20,9 @@ public class EmailSender : MonoBehaviour
 
     public string server = "smtp.gmail.com";
 
+    public string subjectConfirmation = "Your email works with SelfieAR!";
+    public string bodyConfirmation = "If you are receiving this email, you just logged in successfully using SelfieAR! Pictures taken throughough the event will be sent to your costumers from this email.\nDISCLAIMER: SelfieAR does NOT save your email or that of your costumers in any way.";
+
 
 
     public void SendEmail()
@@ -67,8 +70,8 @@ public class EmailSender : MonoBehaviour
 
         mail.To.Add(username);
 
-        mail.Subject = "Your email works with SelfieAR!";
-        mail.Body = "If you are receiving this email, you just logged in successfully using SelfieAR! Pictures taken throughough the event will be sent to your costumers from this email.\n<b>DISCLAIMER:</b> SelfieAR does NOT save your email or that of your costumers in any way.";
+        mail.Subject = subjectConfirmation;
+        mail.Body = bodyConfirmation;
 
         SmtpClient smtpServer = new SmtpClient(server);
         smtpServer.Port = 587;
