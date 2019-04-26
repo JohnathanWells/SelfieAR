@@ -16,6 +16,8 @@ public class ScreenshotManager : MonoBehaviour {
     public CelebrityManager celebrityManager;
     public float cooldown;
     public UnityEvent onPhotoSuccesful;
+    public UnityEvent onPhotoSent;
+    string lastPhotoTaken;
 
     [Header("Email Manager")]
     public EmailSender emailManager;
@@ -28,32 +30,30 @@ public class ScreenshotManager : MonoBehaviour {
 
     IEnumerator TakeScreenshotCoroutine()
     {
-        string destination; 
-
         switch (savingLocation)
         {
             case destinationType.persistentDataPath:
                 DebugScript.instance.Log("A");
-                destination = Path.Combine(Application.persistentDataPath, folder);
+                lastPhotoTaken = Path.Combine(Application.persistentDataPath, folder);
 
-                if (!Directory.Exists(destination))
-                    Directory.CreateDirectory(destination);
+                if (!Directory.Exists(lastPhotoTaken))
+                    Directory.CreateDirectory(lastPhotoTaken);
                 DebugScript.instance.Log("B");
 
                 //destination = Path.Combine(destination, (celebrityManager.celebrityList[celebrityManager.selectedCelebrity].name + "(" + DateTime.Now.ToString(@"MMddyyyy hmmtt") + ")" + extension));
-                destination = destination + "/" + (celebrityManager.celebrityList[celebrityManager.selectedCelebrity].name + "(" + DateTime.Now.ToString(@"MMddyyyy hmmtt") + ")" + extension);
+                lastPhotoTaken = lastPhotoTaken + "/" + (celebrityManager.celebrityList[celebrityManager.selectedCelebrity].name + "(" + DateTime.Now.ToString(@"MMddyyyy hmmtt") + ")" + extension);
                 DebugScript.instance.Log("C");
                 break;
             case destinationType.applicationDataPath:
-                destination = Path.Combine(Application.dataPath, folder);
+                lastPhotoTaken = Path.Combine(Application.dataPath, folder);
 
-                if (!Directory.Exists(destination))
-                    Directory.CreateDirectory(destination);
+                if (!Directory.Exists(lastPhotoTaken))
+                    Directory.CreateDirectory(lastPhotoTaken);
 
-                destination = Path.Combine(destination, (celebrityManager.celebrityList[celebrityManager.selectedCelebrity].name + "(" + DateTime.Now.ToString(@"MMddyyyy hmmtt") + ")" + extension));
+                lastPhotoTaken = Path.Combine(lastPhotoTaken, (celebrityManager.celebrityList[celebrityManager.selectedCelebrity].name + "(" + DateTime.Now.ToString(@"MMddyyyy hmmtt") + ")" + extension));
                 break;
             default:
-                destination = Application.temporaryCachePath + "/" + celebrityManager.celebrityList[celebrityManager.selectedCelebrity].name + "(" + DateTime.Now.ToString(@"MMddyyyy hmmtt") + ")" + extension;
+                lastPhotoTaken = Application.temporaryCachePath + "/" + celebrityManager.celebrityList[celebrityManager.selectedCelebrity].name + "(" + DateTime.Now.ToString(@"MMddyyyy hmmtt") + ")" + extension;
                 break;
         }
         DebugScript.instance.Log("D");
@@ -64,7 +64,7 @@ public class ScreenshotManager : MonoBehaviour {
         //yield return new WaitForSeconds(cooldown);
         
 #if UNITY_EDITOR
-        ScreenCapture.CaptureScreenshot(destination);
+        ScreenCapture.CaptureScreenshot(lastPhotoTaken);
 #else
         Texture2D screencap = new Texture2D(Screen.width, Screen.height, TextureFormat.ARGB32, false);
         screencap.ReadPixels(new Rect(0.0f, 0.0f, Screen.width, Screen.height), 0, 0, true);
@@ -80,17 +80,25 @@ public class ScreenshotManager : MonoBehaviour {
 
         yield return null;
         DebugScript.instance.Log("E");
-        AddPhotoToList(destination);
-        Debug.Log(destination);
+        //AddPhotoToList(lastPhotoTaken);
+        Debug.Log(lastPhotoTaken);
         DebugScript.instance.Log("F");
         yield return new WaitForSeconds(cooldown);
         UserInterface.gameObject.SetActive(true);
 
-        DebugScript.instance.Log("G" + (File.Exists(destination)).ToString());
-        emailManager.SendEmail();
+        Debug.Log("G " + lastPhotoTaken + " " + (File.Exists(lastPhotoTaken)).ToString());
+        //emailManager.SendEmail();
 
-        DebugScript.instance.Log("H");
+        //DebugScript.instance.Log("H");
         onPhotoSuccesful.Invoke();
+    }
+
+    public void SendPhoto()
+    {
+        AddPhotoToList(lastPhotoTaken);
+        emailManager.SendEmail();
+        onPhotoSent.Invoke();
+        //onPhotoSuccesful.Invoke();
     }
 
     public void AddPhotoToList(string withPath)

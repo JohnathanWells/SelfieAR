@@ -23,10 +23,12 @@ public class CelebrityManager : MonoBehaviour {
     public Transform spawnpointPrefab;
     public bool dontRefreshWhenTargetIsLost = false;
     public bool dontDestroyWhenTargetIsLost = false;
+    public bool dontDestroyWhenARIsDisabled = false;
     Transform currentCelebrity;
     ScaleKeeper currentCelebrityScaler;
     float scalerSizeFloat = 0;
     float scalerPositionFloat = 1;
+    public float sizeMultiplier = 2.0f;
     Transform celebritySpawnpoint;
     public bool ARenabled = true;
     bool setDetected = false;
@@ -41,7 +43,7 @@ public class CelebrityManager : MonoBehaviour {
     public void DisableAR()
     {
         ARenabled = false;
-        if (currentCelebrity)
+        if (currentCelebrity && !dontDestroyWhenARIsDisabled)
         {
             Destroy(currentCelebrity.gameObject);
         }
@@ -116,6 +118,27 @@ public class CelebrityManager : MonoBehaviour {
         }
     }
 
+    public void ReplaceCelebrityIfSpawned()
+    {
+        if (currentCelebrity && dontDestroyWhenARIsDisabled && dontDestroyWhenTargetIsLost)
+        {
+            Transform oldCelebrity = currentCelebrity;
+
+            if (selectedVariant < 0)
+                currentCelebrity = Instantiate(celebrityList[selectedCelebrity].prefab, currentCelebrity.position, currentCelebrity.rotation, currentCelebrity.parent);
+            else
+                currentCelebrity = Instantiate(celebrityList[selectedCelebrity].variants[selectedVariant].prefab, currentCelebrity.position, currentCelebrity.rotation, currentCelebrity.parent);
+
+            Destroy(oldCelebrity.gameObject);
+
+            currentCelebrityScaler = currentCelebrity.GetComponentInChildren<ScaleKeeper>();
+            SetMovementFloat(scalerPositionFloat);
+            SetSizeFloat(scalerSizeFloat);
+
+            onSpawn.Invoke();
+        }
+    }
+
     public void DeleteSelectedCelebrity()
     {
         Destroy(currentCelebrity.gameObject);
@@ -154,7 +177,7 @@ public class CelebrityManager : MonoBehaviour {
         scalerSizeFloat = to;
         if (currentCelebrityScaler)
         {
-            currentCelebrityScaler.ScaleVideo(to);
+            currentCelebrityScaler.ScaleVideo(scalerSizeFloat * sizeMultiplier);
         }
     }
 

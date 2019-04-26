@@ -28,6 +28,7 @@ public class LogoManager : MonoBehaviour {
     public Transform logoPrefab;
     public ButtonGeneric selectedLogo;
     string selectedLogoID;
+    public float sizeChangeRate = 2;
     List<ButtonGeneric> spawnedLogos = new List<ButtonGeneric>();
     List<string> spawnedLogoNames = new List<string>();
 
@@ -168,6 +169,9 @@ public class LogoManager : MonoBehaviour {
         DebugScript.instance.Log("0");
         string[] Files = Directory.GetFiles(@completeDirectory, "*.png");
         DebugScript.instance.Log("A");
+
+        loadedLogos.Clear();
+
         foreach (string file in Files)
         {
             DebugScript.instance.Log("B");
@@ -241,6 +245,22 @@ public class LogoManager : MonoBehaviour {
                     selectedLogo.GetComponent<RectTransform>().sizeDelta = new Vector3(temp[0], temp[1], temp[2]);
                 }
             }
+        }
+    }
+
+    public void SizeUp()
+    {
+        if (selectedLogo)
+        {
+            selectedLogo.gameObject.BroadcastMessage("ModifySize", sizeChangeRate);
+        }
+    }
+
+    public void SizeDown()
+    {
+        if (selectedLogo)
+        {
+            selectedLogo.gameObject.BroadcastMessage("ModifySize", -sizeChangeRate);
         }
     }
 

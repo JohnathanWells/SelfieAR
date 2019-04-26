@@ -38,7 +38,7 @@ public class ScaleKeeper : MonoBehaviour {
 
     public void ScaleVideo(float to)
     {
-        parentVideo.localScale = Vector3.one * Mathf.Lerp(minScale, maxScale, to);
+        parentVideo.localScale = Vector3.one * Mathf.LerpUnclamped(minScale, maxScale, to);
         currentScaleIndex = to;
         MoveVideoToPoint(currentPositionIndex);
     }

@@ -27,15 +27,48 @@ public class EmailSender : MonoBehaviour
 
     public void SendEmail()
     {
+        foreach (string s in targetEmails)
+        {
+            StartCoroutine(SendEmailToAddress(s));
+        }
+
+        //MailMessage mail = new MailMessage();
+
+        //mail.From = new MailAddress(managerEmail);
+
+        //foreach (string s in targetEmails)
+        //{
+        //    mail.To.Add(s);
+        //}
+        
+        //mail.Subject = subjectText;
+        //mail.Body = bodyText;
+
+        //foreach (string s in photoPaths)
+        //{
+        //    mail.Attachments.Add(new Attachment(s));
+        //}
+
+        //SmtpClient smtpServer = new SmtpClient(server);
+        //smtpServer.Port = 587;
+        //smtpServer.Credentials = new System.Net.NetworkCredential(managerEmail, managerPassword) as ICredentialsByHost;
+        //smtpServer.EnableSsl = true;
+        //ServicePointManager.ServerCertificateValidationCallback =
+        //    delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        //    { return true; };
+        //smtpServer.Send(mail);
+        Debug.Log("success");
+
+    }
+
+    public IEnumerator SendEmailToAddress(string address)
+    {
         MailMessage mail = new MailMessage();
 
         mail.From = new MailAddress(managerEmail);
 
-        foreach (string s in targetEmails)
-        {
-            mail.To.Add(s);
-        }
-        
+        mail.To.Add(address);
+
         mail.Subject = subjectText;
         mail.Body = bodyText;
 
@@ -52,8 +85,7 @@ public class EmailSender : MonoBehaviour
             delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
             { return true; };
         smtpServer.Send(mail);
-        Debug.Log("success");
-
+        yield return null;
     }
 
     public void SetCredentials(string username, string password)

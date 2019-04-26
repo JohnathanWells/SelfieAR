@@ -30,6 +30,11 @@ public class LogoItem : MonoBehaviour, IDragHandler, IPointerEnterHandler, IPoin
         currentlyOn = false;
     }
 
+    public void ModifySize(float byFactor)
+    {
+        image.rectTransform.sizeDelta += image.rectTransform.sizeDelta.normalized * scalingFactor * byFactor;
+    }
+
     void Update()
     {
         if (currentlyOn)
