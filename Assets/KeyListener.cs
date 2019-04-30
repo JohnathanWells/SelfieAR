@@ -8,6 +8,7 @@ public class KeyListener : MonoBehaviour {
     public bool status = false;
     public KeyCode key;
     public UnityEvent onPress;
+    public UnityEvent onRelease;
 
     public void Enable()
     {
@@ -23,6 +24,10 @@ public class KeyListener : MonoBehaviour {
         if (status && Input.GetKeyDown(key))
         {
             onPress.Invoke();
+        }
+        else if (status && Input.GetKeyUp(key))
+        {
+            onRelease.Invoke();
         }
 		
 	}

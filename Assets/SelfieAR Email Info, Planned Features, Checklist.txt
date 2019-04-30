@@ -1,0 +1,69 @@
+Gmail Account
+username: ar.selfies@gmail.com
+password: 4R-S3lfi3
+
+
+PLANNED FEATURES: 
+-Organize scripts
+-Allow manager to add what celebrities are available by checking them on a list
+-Look into this maybe? (https://stackoverflow.com/questions/37912521/how-to-build-vuforia-unity-project-as-a-windows-pc-standalone-app)
+~Find a way to hide Unity UI
+-Add way to import videos at runtime, set their center, tweak the values, and save them as asset bundles to be reused later.-Add some blur
+-Improve color correction (SHOULD EVALUATE THE AREA BY TRANSFORMING THE BOUNDS OF THE MESH INTO SCREEN SPACE AND ONLY CHECKING THOSE PIXELS) (adjust the differences in brightness and saturation between the overimposed video and the camera feed.)
+-Hide UI in logo customization
+ +-
+ |-Make OpenCV coexist with Vuforia
+-|-Add options for selecting mouse or hand gesture.
+ |~Take picture after 3 seconds of open palm, show this progress on screen
+ +-
+
+
+
+DONE:
++Do animation for the robofest mascot
++Add more celebrities. 
++Allow manager to enter the email from which the pictures will be sent
++Tab should change from username to password, enter should do the testing.
++Change the testing message to "Not tested", change the message to "Failed" before doing the test and "Success" after.
++Allow user to add logos to the canvas (+ button to add logo, click and drag to place it, a ui button rotates it 45 degrees)
++Send picture taken to the user email
++Allow user to enter email-address
++OpenCV open palm capture
++Allow user to select the celebrity
+~Allow variant selection in the menu
++Add Chung and Jose videos
++Add a back button to the photo area.
++Make AR objects keep the size you told them to
++Send people back to the main menu when the picture is taken
++Add menu to resize AR at runtime. Keep a standard with the mark for that. (Fix the pivot)
++Center all videos in their pivot and make them consistent in size
++Add some color correction (UNTESTED) 
++Figure out screen mirroring
++Phone rebuilt
++Cut the Blue clips
++Get more screenshots for animations.
++More back buttons (2 more for manager and 1 more for user interactions)
+		      +-
+		      |1. Introduction (with system context diagram?)
+		      |2. List of functions. (UML use case diagram?)
+Write documentation  -|3. Design & implementation details (with design block diagram?)
+		      |4. Steps to use with screen shots
+		      |5. Future improvement
+		      |6. Entrepreneurship plan
+		      +-
+
+
++Add a way to save logo configuration between sessions
++Add screen for customizing email message
++Show error message if the email doesnt work
++Set up Blue clips (Havent put them in and I need to test them)
++Recut blue clips
++Get Blue thumbnails
++Dont disapear AR object on lost track
++Import logos 
++Make email for SelfieAR(ar.selfies@gmail.com, 4R-S3lfi3)
++Confirmation before returning to main menu
++Phone controls and instructions rewrite (logo control needs to be changed)
++Move email entry after picture is taken
++Idle mode (Manager without the UI and a game object that takes you back to the manager when you press a certain key)
++Show picture before entering email (Add image on the photograph menu displaying the screenshot. When you click "Accept" it takes you to the email enter. Otherwise it hides the object).

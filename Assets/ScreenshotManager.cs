@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.IO;
 using UnityEngine.Events;
+using UnityEngine.UI;
 public enum destinationType { persistentDataPath, applicationDataPath };
 
 public class ScreenshotManager : MonoBehaviour {
@@ -17,6 +18,7 @@ public class ScreenshotManager : MonoBehaviour {
     public float cooldown;
     public UnityEvent onPhotoSuccesful;
     public UnityEvent onPhotoSent;
+    public Image confirmationPhoto;
     string lastPhotoTaken;
 
     [Header("Email Manager")]
@@ -104,5 +106,28 @@ public class ScreenshotManager : MonoBehaviour {
     public void AddPhotoToList(string withPath)
     {
         emailManager.AddAttachment(withPath);
+    }
+
+    public void ShowPictureTaken()
+    {
+        StartCoroutine(LoadPictureFromFolder(lastPhotoTaken));
+    }
+
+    public IEnumerator LoadPictureFromFolder(string path)
+    {
+        Texture2D tex;
+        tex = new Texture2D(4, 4, TextureFormat.DXT5, false);
+        //WWW www = new WWW("file:" + file);
+        //yield return www;
+        byte[] fileData = File.ReadAllBytes(path);
+        yield return null;
+        tex.LoadImage(fileData);
+
+        //www.LoadImageIntoTexture(tex);
+        //GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+        Sprite tempS = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+        tempS.name = Path.GetFileName(path);
+
+        confirmationPhoto.sprite = tempS;
     }
 }
