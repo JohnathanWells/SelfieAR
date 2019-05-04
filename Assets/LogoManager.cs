@@ -166,20 +166,15 @@ public class LogoManager : MonoBehaviour {
 
     public IEnumerator LoadLogosFromFolder()
     {
-        DebugScript.instance.Log("0");
         string[] Files = Directory.GetFiles(@completeDirectory, "*.png");
-        DebugScript.instance.Log("A");
 
         loadedLogos.Clear();
 
         foreach (string file in Files)
         {
-            DebugScript.instance.Log("B");
             Texture2D tex;
             tex = new Texture2D(4, 4, TextureFormat.DXT5, false);
-            DebugScript.instance.Log("BC");
             //WWW www = new WWW("file:" + file);
-            DebugScript.instance.Log("C");
             //yield return www;
             byte[] fileData = File.ReadAllBytes(file);
             yield return null;
@@ -232,6 +227,13 @@ public class LogoManager : MonoBehaviour {
             FileStream file = File.Open(completeDirectory + "/savedLogoConfiguration.gd", FileMode.Open);
             saveFile = (LogoConfiguration)bf.Deserialize(file);
             file.Close();
+
+            for (int n = spawnedLogos.Count - 1; n >= 0; n--)
+            {
+                Destroy(spawnedLogos[n].gameObject);
+            }
+
+            spawnedLogos.Clear();
 
             for (int n = 0; n < Mathf.Min(saveFile.positions.Count, saveFile.spriteNames.Count); n++)
             {
